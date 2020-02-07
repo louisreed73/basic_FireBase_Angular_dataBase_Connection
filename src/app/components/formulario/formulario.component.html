@@ -25,3 +25,10 @@
 </div>
 
 </div>
+<div class="postsList">
+    <div class="listItem" *ngFor="let post of PostGuardados;let i=index">
+        <h3 [ngClass]="{nuevo:i===0}">{{post.titulo}}</h3>
+        <hr>
+        <p>{{post.contenido}}</p>
+    </div>
+</div>

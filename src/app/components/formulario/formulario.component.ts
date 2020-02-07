@@ -56,7 +56,8 @@ export class FormularioComponent implements OnInit{
     this.http
     .post<{name:string}>("https://ng-databse.firebaseio.com/posts.json",newPost)
     .subscribe((data)=>{
-      console.log(data)
+      console.log(data);
+      this.recupera();
     })
   }
 
@@ -71,7 +72,7 @@ export class FormularioComponent implements OnInit{
         }
         // console.log(arrayPost)
       }
-      return arrayPost
+      return arrayPost.reverse();
     })).subscribe(datos => {
       // console.log(datos);
       this.PostGuardados=datos
