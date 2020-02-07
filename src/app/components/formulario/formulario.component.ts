@@ -28,6 +28,8 @@ export class FormularioComponent implements OnInit{
   @ViewChild("rec",{static:true}) rec:ElementRef;
   @ViewChild("bor",{static:true}) bor:ElementRef;
 
+  PostGuardados:Post[]=[];
+
   constructor(private http:HttpClient) { }
 
   ngOnInit() {
@@ -45,15 +47,15 @@ export class FormularioComponent implements OnInit{
   onSubmit(form:NgForm) {
 
     let {titulo,contenido}=form.value;
-    let newPost=new Post(titulo,contenido);
+    let newPost=this._Post(titulo,contenido);
     // let newPost2=new Post(_gen.next().value,titulo,contenido);
     
     // let input=elem.querySelector("input");
     console.log(form.value,newPost)
 
     this.http
-    .post("https://ng-databse.firebaseio.com/posts.json",newPost)
-    .subscribe(data=>{
+    .post<{name:string}>("https://ng-databse.firebaseio.com/posts.json",newPost)
+    .subscribe((data)=>{
       console.log(data)
     })
   }
@@ -61,8 +63,8 @@ export class FormularioComponent implements OnInit{
   recupera() {
 
     // console.log(this.http)
-    this.http.get("https://ng-databse.firebaseio.com/posts.json").pipe(map(post=>{
-      let arrayPost=[];
+    this.http.get<{[key:string]:Post}>("https://ng-databse.firebaseio.com/posts.json").pipe(map( post=>{
+      let arrayPost:Post[]=[];
       for(let key in post) {
         if(post.hasOwnProperty(key)) {
           arrayPost.push(  {...post[key] , id:key})
@@ -71,7 +73,16 @@ export class FormularioComponent implements OnInit{
       }
       return arrayPost
     })).subscribe(datos => {
-      console.log(datos)
+      // console.log(datos);
+      this.PostGuardados=datos
+      console.log(this.PostGuardados);
     })
+  }
+
+  _Post(titulo:string,contenido:string):Post {
+    return {
+      titulo:titulo,
+      contenido:contenido
+    }
   }
 }
