@@ -1,0 +1,65 @@
+
+[formulario] {
+    background:rgb(234, 234, 234);
+    // height:40rem;
+flex-flow: column wrap;
+justify-content:center;
+align-items:center;
+padding: 2rem 0 2rem;
+}
+
+
+.inp_Gen {
+    display:flex;
+    flex-flow: column wrap;
+    justify-content:center;
+    align-items:center;
+}
+
+input, button, label,textarea {
+    display:block;
+    margin-bottom:1rem;
+}
+
+label {
+    font-size: 1.4em;
+}
+
+input, textarea {
+    font-family: 'Montserrat', sans-serif;
+    width:20rem;
+    padding:1rem 3rem;
+}
+
+textarea {
+    width:30rem;
+
+}
+
+button {
+    font-family: 'Montserrat', sans-serif;
+    margin: 1rem auto;
+    border:none;
+    background:darkgreen;
+    padding:1rem 2rem;
+    color:white;
+    cursor:pointer;
+    border-radius: .3rem;
+}
+
+.dataBase {
+    display:flex;
+    justify-content: center;
+    align-items:center;
+}
+
+.rec,.bor {
+    // display:inline-block;
+    margin: 2rem;
+    background:rgb(0, 106, 206);
+        
+}
+
+.bor {
+    background:rgb(206, 0, 0);
+}
