@@ -20,12 +20,13 @@
       <button type="submit">Enviar Post</button>
 </form>
 <div class="dataBase">
-    <button class="rec" #rec>Recuperar Posts</button>
+    <button class="rec" #rec (click)="onRecuperarPosts()">Recuperar Posts</button>
     <button class="bor" #bor>Borrar Posts</button>
 </div>
 
 </div>
 <div class="postsList">
+    <h3 class="fetchInd" [class]="fetching? 'fetchInd desplegado': 'fetchInd oculto'    ">Desplegando Posts....</h3>
     <div class="listItem" *ngFor="let post of PostGuardados;let i=index">
         <h3 [ngClass]="{nuevo:i===0}">{{post.titulo}}</h3>
         <hr>

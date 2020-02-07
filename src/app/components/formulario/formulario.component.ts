@@ -1,10 +1,9 @@
+import { HttpServiceService } from './../../services/http-service.service';
 import { Post } from './../../models/post';
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
-import {HttpClient} from '@angular/common/http';
-import { mapToMapExpression } from '@angular/compiler/src/render3/util';
-import { map } from 'rxjs/operators';
+
 
 
 const gen=function* () {
@@ -29,56 +28,55 @@ export class FormularioComponent implements OnInit{
   @ViewChild("bor",{static:true}) bor:ElementRef;
 
   PostGuardados:Post[]=[];
+  fetching:boolean=false;
 
-  constructor(private http:HttpClient) { }
+
+  constructor(private http:HttpServiceService) { }
 
   ngOnInit() {
 
+    this.fetching=!this.fetching;
     console.log(this.http,this.rec,this.bor);
-    this.recupera();
-    // console.log(this.rec.nativeElement.classList)
-    this.rec.nativeElement.addEventListener("click",this.recupera.bind(this))
-    this.bor.nativeElement.addEventListener("click",()=>{
-      console.log("borrando los datos!!!!!!")
-    });
-    // this.recupera()
+
+    this.http.recuperaPost().subscribe(datos => {
+      this.PostGuardados=datos;
+      this.fetching=!this.fetching;
+    })
   }
 
   onSubmit(form:NgForm) {
 
     let {titulo,contenido}=form.value;
     let newPost=this._Post(titulo,contenido);
-    // let newPost2=new Post(_gen.next().value,titulo,contenido);
+
+    console.log(form.value,newPost);
+
+    this.http.createPost(newPost).subscribe(datos => {
+      this.fetching=!this.fetching;
+      console.log("Datos actualmente: ",datos)
+   
+      console.log("Datos actualmente en el Array: ",this.PostGuardados);
+
+      this.http.recuperaPost().subscribe(datos => {
+        this.PostGuardados=datos;
+    this.fetching=!this.fetching;
+
+      })
+    })
     
-    // let input=elem.querySelector("input");
-    console.log(form.value,newPost)
 
-    this.http
-    .post<{name:string}>("https://ng-databse.firebaseio.com/posts.json",newPost)
-    .subscribe((data)=>{
-      console.log(data);
-      this.recupera();
-    })
+
+
   }
 
-  recupera() {
+  onRecuperarPosts() {
 
-    // console.log(this.http)
-    this.http.get<{[key:string]:Post}>("https://ng-databse.firebaseio.com/posts.json").pipe(map( post=>{
-      let arrayPost:Post[]=[];
-      for(let key in post) {
-        if(post.hasOwnProperty(key)) {
-          arrayPost.push(  {...post[key] , id:key})
-        }
-        // console.log(arrayPost)
-      }
-      return arrayPost.reverse();
-    })).subscribe(datos => {
-      // console.log(datos);
-      this.PostGuardados=datos
-      console.log(this.PostGuardados);
+    this.http.recuperaPost().subscribe(datos => {
+      this.PostGuardados=datos;
     })
+
   }
+
 
   _Post(titulo:string,contenido:string):Post {
     return {
